@@ -1,0 +1,94 @@
+;                              Ejercicio 6 - PROBLEMA
+;
+;                                 P3 TSI grupo 2
+;                      Realizado por Paula Cumbreras Torrente
+;
+; Los costes de cada elemento (edificio, unidad o investigación) son los siguientes:
+; Elemento             Minerales        Gas
+; Centro de Mando      150              50
+; Barracones           150              0
+; Extractor            75               0
+; Bahía                125              0
+; Deposito             75               25
+; VCE                  50               0
+; Marine               50               0
+; Segador              50               50
+; Impulsor Segador     50               200
+; El objetivo de este ejercicio es disponer de un marine en una localización, y
+; tener otro marine y un segador en otra.
+;
+
+(define (problem problema)
+  (:domain dominio)
+  (:objects
+    l1_1 l1_2 l1_3 l1_4 l1_5 l2_1 l2_2 l2_3 l2_4 l2_5 l3_1 l3_2 l3_3 l3_4 l3_5 l4_1 l4_2 l4_3 l4_4 l4_5 l5_1 l5_2 l5_3 l5_4 l5_5 - localizacion
+    centro barracon extractor bahia d1 d2 d3 - edificio
+    u1 u2 u3 u4 u5 u6 u7 m1 m2 s1 - unidad
+    min1 min2 min3 gas1 gas2 - recurso
+    imp_seg - investigacion
+  )
+  (:init
+    ; creación grid
+    (existeCamino l1_1 l2_1) (existeCamino l2_1 l1_1) (existeCamino l1_1 l1_2) (existeCamino l1_2 l1_1) (existeCamino l1_2 l2_2) (existeCamino l2_2 l1_2) (existeCamino l1_2 l1_3)
+    (existeCamino l1_3 l1_2) (existeCamino l1_2 l1_1) (existeCamino l1_1 l1_2) (existeCamino l1_3 l2_3) (existeCamino l2_3 l1_3) (existeCamino l1_3 l1_4) (existeCamino l1_4 l1_3)
+    (existeCamino l1_3 l1_2) (existeCamino l1_2 l1_3) (existeCamino l1_4 l2_4) (existeCamino l2_4 l1_4) (existeCamino l1_4 l1_5) (existeCamino l1_5 l1_4) (existeCamino l1_4 l1_3)
+    (existeCamino l1_3 l1_4) (existeCamino l1_5 l2_5) (existeCamino l2_5 l1_5) (existeCamino l1_5 l1_4) (existeCamino l1_4 l1_5) (existeCamino l2_1 l1_1) (existeCamino l1_1 l2_1)
+    (existeCamino l2_1 l3_1) (existeCamino l3_1 l2_1) (existeCamino l2_1 l2_2) (existeCamino l2_2 l2_1) (existeCamino l2_2 l1_2) (existeCamino l1_2 l2_2) (existeCamino l2_2 l3_2)
+    (existeCamino l3_2 l2_2) (existeCamino l2_2 l2_3) (existeCamino l2_3 l2_2) (existeCamino l2_2 l2_1) (existeCamino l2_1 l2_2) (existeCamino l2_3 l1_3) (existeCamino l1_3 l2_3)
+    (existeCamino l2_3 l3_3) (existeCamino l3_3 l2_3) (existeCamino l2_3 l2_4) (existeCamino l2_4 l2_3) (existeCamino l2_3 l2_2) (existeCamino l2_2 l2_3) (existeCamino l2_4 l1_4)
+    (existeCamino l1_4 l2_4) (existeCamino l2_4 l3_4) (existeCamino l3_4 l2_4) (existeCamino l2_4 l2_5) (existeCamino l2_5 l2_4) (existeCamino l2_4 l2_3) (existeCamino l2_3 l2_4)
+    (existeCamino l2_5 l1_5) (existeCamino l1_5 l2_5) (existeCamino l2_5 l3_5) (existeCamino l3_5 l2_5) (existeCamino l2_5 l2_4) (existeCamino l2_4 l2_5) (existeCamino l3_1 l2_1)
+    (existeCamino l2_1 l3_1) (existeCamino l3_1 l4_1) (existeCamino l4_1 l3_1) (existeCamino l3_1 l3_2) (existeCamino l3_2 l3_1) (existeCamino l3_2 l2_2) (existeCamino l2_2 l3_2)
+    (existeCamino l3_2 l4_2) (existeCamino l4_2 l3_2) (existeCamino l3_2 l3_3) (existeCamino l3_3 l3_2) (existeCamino l3_2 l3_1) (existeCamino l3_1 l3_2) (existeCamino l3_3 l2_3)
+    (existeCamino l2_3 l3_3) (existeCamino l3_3 l4_3) (existeCamino l4_3 l3_3) (existeCamino l3_3 l3_4) (existeCamino l3_4 l3_3) (existeCamino l3_3 l3_2) (existeCamino l3_2 l3_3)
+    (existeCamino l3_4 l2_4) (existeCamino l2_4 l3_4) (existeCamino l3_4 l4_4) (existeCamino l4_4 l3_4) (existeCamino l3_4 l3_5) (existeCamino l3_5 l3_4) (existeCamino l3_4 l3_3)
+    (existeCamino l3_3 l3_4) (existeCamino l3_5 l2_5) (existeCamino l2_5 l3_5) (existeCamino l3_5 l4_5) (existeCamino l4_5 l3_5) (existeCamino l3_5 l3_4) (existeCamino l3_4 l3_5)
+    (existeCamino l4_1 l3_1) (existeCamino l3_1 l4_1) (existeCamino l4_1 l5_1) (existeCamino l5_1 l4_1) (existeCamino l4_1 l4_2) (existeCamino l4_2 l4_1) (existeCamino l4_2 l3_2)
+    (existeCamino l3_2 l4_2) (existeCamino l4_2 l5_2) (existeCamino l5_2 l4_2) (existeCamino l4_2 l4_3) (existeCamino l4_3 l4_2) (existeCamino l4_2 l4_1) (existeCamino l4_1 l4_2)
+    (existeCamino l4_3 l3_3) (existeCamino l3_3 l4_3) (existeCamino l4_3 l5_3) (existeCamino l5_3 l4_3) (existeCamino l4_3 l4_4) (existeCamino l4_4 l4_3) (existeCamino l4_3 l4_2)
+    (existeCamino l4_2 l4_3) (existeCamino l4_4 l3_4) (existeCamino l3_4 l4_4) (existeCamino l4_4 l5_4) (existeCamino l5_4 l4_4) (existeCamino l4_4 l4_5) (existeCamino l4_5 l4_4)
+    (existeCamino l4_4 l4_3) (existeCamino l4_3 l4_4) (existeCamino l4_5 l3_5) (existeCamino l3_5 l4_5) (existeCamino l4_5 l5_5) (existeCamino l5_5 l4_5) (existeCamino l4_5 l4_4)
+    (existeCamino l4_4 l4_5) (existeCamino l5_1 l4_1) (existeCamino l4_1 l5_1) (existeCamino l5_1 l5_2) (existeCamino l5_2 l5_1) (existeCamino l5_2 l4_2) (existeCamino l4_2 l5_2)
+    (existeCamino l5_2 l5_3) (existeCamino l5_3 l5_2) (existeCamino l5_2 l5_1) (existeCamino l5_1 l5_2) (existeCamino l5_3 l4_3) (existeCamino l4_3 l5_3) (existeCamino l5_3 l5_4)
+    (existeCamino l5_4 l5_3) (existeCamino l5_3 l5_2) (existeCamino l5_2 l5_3) (existeCamino l5_4 l4_4) (existeCamino l4_4 l5_4) (existeCamino l5_4 l5_5) (existeCamino l5_5 l5_4)
+    (existeCamino l5_4 l5_3) (existeCamino l5_3 l5_4) (existeCamino l5_5 l4_5) (existeCamino l4_5 l5_5) (existeCamino l5_5 l5_4) (existeCamino l5_4 l5_5)
+    ; asignación tipos
+    (esTipoUnidad u1 VCE) (esTipoUnidad u2 VCE) (esTipoUnidad u3 VCE) (esTipoUnidad u4 VCE) (esTipoUnidad u5 VCE) (esTipoUnidad u6 VCE) (esTipoUnidad u7 VCE)
+    (esTipoUnidad m1 Marine) (esTipoUnidad m2 Marine) (esTipoUnidad s1 Segador)
+    (esTipoEdificio centro CentroDeMando) (esTipoEdificio barracon Barracones) (esTipoEdificio bahia BahiaDeIngenieria) (esTipoEdificio extractor Extractor)
+    (esTipoEdificio d1 Deposito) (esTipoEdificio d2 Deposito) (esTipoEdificio d3 Deposito)
+    (esTipoRecurso min1 Minerales) (esTipoRecurso min2 Minerales) (esTipoRecurso min3 Minerales) (esTipoRecurso gas1 Gas)
+    (esTipoRecurso gas2 Gas)
+    (esTipoInvestigacion imp_seg ImpulsorSegador)
+    ; distribución objetos
+    (edificioEn centro l4_2) (unidadEn u1 l5_3) ;(unidadEn u2 l1_4) (unidadEn u3 l2_2) (unidadEn u4 l2_1) (unidadEn u5 l4_2)
+    (asignarMaterial min1 l3_1) (asignarMaterial min2 l2_5) (asignarMaterial min3 l1_5)
+    (asignarMaterial gas1 l4_4) (asignarMaterial gas2 l3_3)
+    ; recursos
+    (necesitaRecurso Barracones Minerales) (necesitaRecurso CentroDeMando Gas) (necesitaRecurso CentroDeMando Minerales) (necesitaRecurso Extractor Minerales)
+    (necesitaRecurso BahiaDeIngenieria Minerales) (necesitaRecurso BahiaDeIngenieria Gas)
+    (recursoUnidad VCE Minerales) (recursoUnidad Marine Minerales) (recursoUnidad Segador Minerales) (recursoUnidad Segador Gas)
+    (generaUnidad CentroDeMando VCE) (generaUnidad Barracones Marine) (generaUnidad Barracones Segador)
+    (recursoInvestigar ImpulsorSegador Minerales) (recursoInvestigar ImpulsorSegador Gas)
+    ; información numerica
+    (= (cantidadRecurso Minerales) 50) (= (cantidadRecurso Gas) 0)
+    (= (maximoAlmacen) 100) (= (numTrabajadores Minerales) 0) (= (numTrabajadores Gas) 0)
+    (= (capacidadRecoleccion) 25)
+    (= (costeConstruccion CentroDeMando Minerales) 150) (= (costeConstruccion CentroDeMando Gas) 50)
+    (= (costeConstruccion Barracones Minerales) 150) (= (costeConstruccion Barracones Gas) 0)
+    (= (costeConstruccion Extractor Minerales) 75) (= (costeConstruccion Extractor Gas) 0)
+    (= (costeConstruccion BahiaDeIngenieria Minerales) 125) (= (costeConstruccion BahiaDeIngenieria Gas) 0)
+    (= (costeConstruccion Deposito Minerales) 75) (= (costeConstruccion Deposito Gas) 25)
+    (= (costeReclutamiento VCE Minerales) 50) (= (costeReclutamiento VCE Gas) 0)
+    (= (costeReclutamiento Marine Minerales) 50) (= (costeReclutamiento Marine Gas) 0)
+    (= (costeReclutamiento Segador Minerales) 50) (= (costeReclutamiento Segador Gas) 50)
+    (= (costeInvestigacion ImpulsorSegador Minerales) 50) (= (costeInvestigacion ImpulsorSegador Gas) 200)
+  )
+  (:goal
+    (and
+      (unidadEn m1 l1_2)
+      (unidadEn s1 l1_2)
+      (unidadEn m2 l5_4)
+    )
+  )
+)
